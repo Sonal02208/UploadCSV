@@ -1,0 +1,31 @@
+<mvc:View xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="demo.uploadcsv.uploadcsv.controller.View1" displayBlock="true">
+    <Page id="page" title="{i18n>title}">
+        <content>
+            <l:VerticalLayout id="vl">
+                <u:FileUploader
+                    id="FileUploaderId"
+                    name="UploadedFile"
+                    useMultipart="true"
+                    httpRequestMethod="Post"
+                    uploadUrl="/UploadFile"
+                    uploadOnChange="false"
+                    tooltip="Upload your file to the server"
+                    uploadComplete="handleUploadComplete"
+                    change="handleValueChange"
+                    typeMissmatch="handleTypeMissmatch"
+                    style="Emphasized"
+                    fileType="csv"
+                    placeholder="Choose a file for Upload..."
+                    class="sapUiSmallMarginBegin"
+                >
+                    <u:parameters>
+                        <u:FileUploaderParameter id="flup1" name="Accept-CH" value="Viewport-Width" />
+                        <u:FileUploaderParameter id="flup2" name="Accept-CH" value="Width" />
+                        <u:FileUploaderParameter id="flup3" name="Accept-CH-Lifetime" value="86400" />
+                    </u:parameters>
+                </u:FileUploader>
+                <Button id="btn" text="Upload File" press="handleUploadPress" />
+            </l:VerticalLayout>
+        </content>
+    </Page>
+</mvc:View>
