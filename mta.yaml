@@ -1,0 +1,121 @@
+_schema-version: "3.1"
+ID: UploadCSV
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: UploadCSV-srv
+  type: nodejs
+  path: srv
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm-ci
+- name: UploadCSV-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: UploadCSV-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - uploadcsvuploadcsv.zip
+      name: uploadcsvuploadcsv
+      target-path: resources/
+- name: uploadcsvuploadcsv
+  type: html5
+  path: app/uploadcsv
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: UploadCSV-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: UploadCSV-destination-service
+    parameters:
+      content-target: true
+  - name: UploadCSV-repo-host
+    parameters:
+      service-key:
+        name: UploadCSV-repo-host-key
+  - name: uaa_UploadCSV
+    parameters:
+      service-key:
+        name: uaa_UploadCSV-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: upcsv_UploadCSV_repo_host
+          ServiceInstanceName: UploadCSV-html5-srv
+          ServiceKeyName: UploadCSV-repo-host-key
+          sap.cloud.service: upcsv
+        - Authentication: OAuth2UserTokenExchange
+          Name: upcsv_uaa_UploadCSV
+          ServiceInstanceName: UploadCSV-xsuaa-service
+          ServiceKeyName: uaa_UploadCSV-key
+          sap.cloud.service: upcsv
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+resources:
+- name: UploadCSV-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: UploadCSV-html5-srv
+    service-plan: app-host
+- name: UploadCSV-destination-service
+  type: org.cloudfoundry.managed-service
+  requires:
+    - name: srv-api 
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+              - Authentication: NoAuthentication
+                ForwardAuthToken: true
+                HTML5.DynamicDestination: true
+                HTML5.FowardAuthToken: true
+                Name: rest_api
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://${appname}.${default-domain}
+            existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: UploadCSV-destination-service
+    service-plan: lite
+- name: uaa_UploadCSV
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: UploadCSV-xsuaa-service
+    service-plan: application
+parameters:
+  appname: cap-${space}
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npx -p @sap/cds-dk cds build --production

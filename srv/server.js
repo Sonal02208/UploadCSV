@@ -3,6 +3,7 @@ const express = require('express')
 const proxy = require('@sap/cds-odata-v2-adapter-proxy')
 const fileupload = require('express-fileupload')
 const papa = require('papaparse')
+cds.env.features.fetch_csrf = false;
 
 cds.on('bootstrap', (app) => {
 
@@ -13,10 +14,10 @@ cds.on('bootstrap', (app) => {
     app.use(express.static(__dirname + '/srv/public'))
 
     //File path
-    app.use(fileupload({ createParentPath: true }))
+    // app.use(fileupload({ createParentPath: true }))
 
     //HTTP POST call to the endpoint /UploadFile from frontend to the async service 
-    app.post('/UploadFile', async (req, res) => {
+    app.post('/UploadFile', fileupload({ createParentPath: true }),async (req, res) => {
         try {
             console.log("Server side => File uploaded called...");
             if (req.files) {

@@ -1,67 +1,71 @@
 {
-  "name": "UploadCSV",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap/cds": "^6",
-    "@sap/cds-odata-v2-adapter-proxy": "^1.9.10",
-    "express": "^4",
-    "express-fileupload": "^1.4.0",
-    "papaparse": "^5.3.2"
-  },
-  "devDependencies": {
-    "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
-    "@sap/ux-specification": "^1.102.10",
-    "@sapui5/ts-types": "^1.92.2",
-    "eslint": "^7.32.0",
-    "sqlite3": "^5.1.2"
-  },
-  "scripts": {
-    "start": "cds run",
-    "watch-uploadcsv": "cds watch --open uploadcsv/webapp/index.html?sap-ui-xx-viewCache=false"
-  },
-  "engines": {
-    "node": "^16.15"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "UploadCSV",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/cds": "^6",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.9.10",
+        "express": "^4",
+        "express-fileupload": "^1.4.0",
+        "papaparse": "^5.3.2"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+    "devDependencies": {
+        "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
+        "@sap/ux-specification": "^1.102.12",
+        "@sapui5/ts-types": "^1.92.2",
+        "eslint": "^7.32.0",
+        "sqlite3": "^5.1.2",
+        "rimraf": "^3.0.2"
     },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
-    }
-  },
-  "cds": {
-    "requires": {
-      "db": {
-        "kind": "sqlite",
-        "credentials": {
-          "database": "sqlite.db"
+    "scripts": {
+        "start": "cds run",
+        "watch-uploadcsv": "cds watch --open uploadcsv/webapp/index.html?sap-ui-xx-viewCache=false",
+        "undeploy": "cf undeploy UploadCSV --delete-services --delete-service-keys --delete-service-brokers",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    },
+    "engines": {
+        "node": "^16.15"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
+        },
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
+        },
+        "rules": {
+            "no-console": "off",
+            "require-atomic-updates": "off"
         }
-      }
-    }
-  },
-  "sapux": [
-    "app/uploadcsv"
-  ]
+    },
+    "cds": {
+        "requires": {
+            "db": {
+                "kind": "sqlite",
+                "credentials": {
+                    "database": "sqlite.db"
+                }
+            }
+        }
+    },
+    "sapux": [
+        "app/uploadcsv"
+    ]
 }

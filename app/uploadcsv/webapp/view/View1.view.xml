@@ -1,4 +1,4 @@
-<mvc:View xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="demo.uploadcsv.uploadcsv.controller.View1" displayBlock="true">
+<mvc:View xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="uploadcsv.uploadcsv.controller.View1" displayBlock="true">
     <Page id="page" title="{i18n>title}">
         <content>
             <l:VerticalLayout id="vl">

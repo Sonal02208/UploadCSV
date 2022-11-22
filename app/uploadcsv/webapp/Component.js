@@ -1,16 +1,9 @@
-/**
- * eslint-disable @sap/ui5-jsdocs/no-jsdoc
- */
-
-sap.ui.define([
-        "sap/ui/core/UIComponent",
-        "sap/ui/Device",
-        "demo/uploadcsv/uploadcsv/model/models"
-    ],
-    function (UIComponent, Device, models) {
+sap.ui.define(
+    ["sap/ui/core/UIComponent"],
+    function (UIComponent) {
         "use strict";
 
-        return UIComponent.extend("demo.uploadcsv.uploadcsv.Component", {
+        return UIComponent.extend("uploadcsv.uploadcsv.Component", {
             metadata: {
                 manifest: "json"
             },
@@ -26,9 +19,6 @@ sap.ui.define([
 
                 // enable routing
                 this.getRouter().initialize();
-
-                // set the device model
-                this.setModel(models.createDeviceModel(), "device");
             }
         });
     }
